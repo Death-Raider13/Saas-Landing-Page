@@ -1,4 +1,6 @@
-export const siteConfig = {
+import { SiteConfig } from "@/types"
+
+export const siteConfig: SiteConfig = {
   name: "SaaS Landing Template",
   description: "A beautiful, modern SaaS landing page template built with Next.js, TypeScript, and Tailwind CSS",
   url: "https://your-domain.com",
@@ -107,19 +109,49 @@ export const siteConfig = {
       name: "Sarah Johnson",
       role: "CEO, TechStart",
       avatar: "/avatars/sarah.jpg",
-      content: "This template saved us months of development time. The design is beautiful and the code quality is exceptional."
+      content: "This template saved us months of development time. The design is beautiful and the code quality is exceptional.",
+      rating: 5,
+      company: "TechStart"
     },
     {
       name: "Michael Chen",
       role: "Product Manager, InnovateCorp",
       avatar: "/avatars/michael.jpg",
-      content: "The customization options are fantastic. We were able to match our brand perfectly and launch quickly."
+      content: "The customization options are fantastic. We were able to match our brand perfectly and launch quickly.",
+      rating: 5,
+      company: "InnovateCorp"
     },
     {
       name: "Emily Rodriguez",
       role: "Founder, StartupXYZ",
       avatar: "/avatars/emily.jpg",
-      content: "Professional, modern, and responsive. Our conversion rates improved significantly after switching to this template."
+      content: "Professional, modern, and responsive. Our conversion rates improved significantly after switching to this template.",
+      rating: 5,
+      company: "StartupXYZ"
+    },
+    {
+      name: "David Kim",
+      role: "CTO, DevFlow",
+      avatar: "/avatars/david.jpg",
+      content: "The TypeScript support and modern architecture made integration seamless. Highly recommend for any SaaS project.",
+      rating: 5,
+      company: "DevFlow"
+    },
+    {
+      name: "Lisa Wang",
+      role: "Designer, CreativeStudio",
+      avatar: "/avatars/lisa.jpg",
+      content: "Beautiful design system and components. The dark mode implementation is flawless.",
+      rating: 5,
+      company: "CreativeStudio"
+    },
+    {
+      name: "Alex Thompson",
+      role: "Founder, GrowthLab",
+      avatar: "/avatars/alex.jpg",
+      content: "Converted 40% better than our previous landing page. The animations and UX are top-notch.",
+      rating: 5,
+      company: "GrowthLab"
     }
   ],
   faqs: [
@@ -154,5 +186,54 @@ export const siteConfig = {
     email: "hello@yourdomain.com",
     phone: "+1 (555) 123-4567",
     address: "123 Business St, Suite 100, City, State 12345"
-  }
+  },
+  stats: [
+    {
+      number: "10,000+",
+      label: "Happy Customers",
+      description: "Businesses trust our template"
+    },
+    {
+      number: "99.9%",
+      label: "Uptime",
+      description: "Reliable performance guaranteed"
+    },
+    {
+      number: "4.9/5",
+      label: "Average Rating",
+      description: "Based on 2,500+ reviews"
+    },
+    {
+      number: "24/7",
+      label: "Support",
+      description: "Always here to help you"
+    }
+  ],
+  trustedBy: [
+    {
+      name: "TechCorp",
+      logo: "/logos/techcorp.svg",
+      url: "https://techcorp.com"
+    },
+    {
+      name: "InnovateLab",
+      logo: "/logos/innovatelab.svg",
+      url: "https://innovatelab.com"
+    },
+    {
+      name: "StartupXYZ",
+      logo: "/logos/startupxyz.svg",
+      url: "https://startupxyz.com"
+    },
+    {
+      name: "DigitalFlow",
+      logo: "/logos/digitalflow.svg",
+      url: "https://digitalflow.com"
+    },
+    {
+      name: "CloudSync",
+      logo: "/logos/cloudsync.svg",
+      url: "https://cloudsync.com"
+    }
+  ]
 }

@@ -1,20 +1,79 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { siteConfig } from '@/config/site'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const metadata: Metadata = {
-  title: 'SaaS Landing Template',
-  description: 'A beautiful, modern SaaS landing page template built with Next.js, TypeScript, and Tailwind CSS',
-  keywords: ['SaaS', 'landing page', 'Next.js', 'TypeScript', 'Tailwind CSS'],
-  authors: [{ name: 'SaaS Template' }],
-  openGraph: {
-    title: 'SaaS Landing Template',
-    description: 'A beautiful, modern SaaS landing page template',
-    type: 'website',
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
   },
+  description: siteConfig.description,
+  keywords: [
+    'SaaS',
+    'landing page',
+    'Next.js',
+    'TypeScript',
+    'Tailwind CSS',
+    'React',
+    'template',
+    'modern',
+    'responsive',
+    'dark mode',
+    'Framer Motion',
+    'shadcn/ui'
+  ],
+  authors: [
+    {
+      name: 'SaaS Template',
+      url: siteConfig.url,
+    },
+  ],
+  creator: 'SaaS Template',
+  metadataBase: new URL(siteConfig.url),
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+    creator: '@yourusername',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
 }
 
 export default function RootLayout({

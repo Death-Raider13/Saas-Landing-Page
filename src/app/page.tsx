@@ -1,5 +1,7 @@
 import { Navigation } from "@/components/navigation"
 import { HeroSection } from "@/components/sections/hero"
+import { TrustedBySection } from "@/components/sections/trusted-by"
+import { StatsSection } from "@/components/sections/stats"
 import { FeaturesSection } from "@/components/sections/features"
 import { PricingSection } from "@/components/sections/pricing"
 import { TestimonialsSection } from "@/components/sections/testimonials"
@@ -13,6 +15,8 @@ export default function Home() {
       <Navigation />
       <main className="flex-1">
         <HeroSection />
+        <TrustedBySection />
+        <StatsSection />
         <FeaturesSection />
         <PricingSection />
         <TestimonialsSection />
