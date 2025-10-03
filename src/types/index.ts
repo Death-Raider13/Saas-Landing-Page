@@ -76,15 +76,6 @@ export interface ContactConfig {
     number: string
     message: string
   }
-  calendly: {
-    url: string
-    enabled: boolean
-  }
-  messenger: {
-    pageId: string
-    appId: string
-    enabled: boolean
-  }
 }
 
 export interface Stat {

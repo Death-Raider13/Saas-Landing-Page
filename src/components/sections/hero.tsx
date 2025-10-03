@@ -163,17 +163,12 @@ export function HeroSection() {
                 size="lg"
                 className="text-lg px-6 py-6 h-auto group text-primary hover:text-primary/80 hover:bg-primary/10 transition-all duration-300"
                 onClick={() => {
-                  if (siteConfig.contact.calendly.enabled && siteConfig.contact.calendly.url) {
-                    if (typeof window !== 'undefined' && (window as any).Calendly) {
-                      (window as any).Calendly.initPopupWidget({ url: siteConfig.contact.calendly.url })
-                    } else {
-                      window.open(siteConfig.contact.calendly.url, '_blank')
-                    }
-                  }
+                  // Scroll to contact section
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
                 }}
               >
                 <Zap className="mr-2 h-5 w-5" />
-                Book Demo
+                Live Demo
                 <motion.div
                   animate={{ x: [0, 5, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}

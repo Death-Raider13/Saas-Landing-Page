@@ -189,15 +189,6 @@ export const siteConfig: SiteConfig = {
     whatsapp: {
       number: "1234567890", // Your WhatsApp number (without + or spaces)
       message: "Hi! I'm interested in your SaaS template. Can you help me?"
-    },
-    calendly: {
-      url: "https://calendly.com/yourusername/30min", // Your Calendly booking URL
-      enabled: true
-    },
-    messenger: {
-      pageId: "your-facebook-page-id", // Your Facebook Page ID
-      appId: "your-facebook-app-id", // Your Facebook App ID
-      enabled: true
     }
   },
   stats: [
