@@ -91,6 +91,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          {/* WhatsApp and Messenger floating buttons will be added to main page */}
         </ThemeProvider>
       </body>
     </html>

@@ -1,14 +1,99 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Mail, Phone, MapPin, Send } from "lucide-react"
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { contactFormSchema, newsletterSchema, type ContactFormData, type NewsletterData } from "@/lib/validations"
 import { siteConfig } from "@/config/site"
 
 export function ContactSection() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [isNewsletterSubmitting, setIsNewsletterSubmitting] = useState(false)
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  const contactForm = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      company: "",
+      message: "",
+    },
+  })
+
+  const newsletterForm = useForm<NewsletterData>({
+    resolver: zodResolver(newsletterSchema),
+    defaultValues: {
+      email: "",
+    },
+  })
+
+  const onContactSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      // Here you would typically send the data to your API
+      // For now, we'll simulate an API call
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        contactForm.reset()
+      } else {
+        setSubmitStatus('error')
+      }
+    } catch (error) {
+      console.error('Contact form error:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const onNewsletterSubmit = async (data: NewsletterData) => {
+    setIsNewsletterSubmitting(true)
+    setNewsletterStatus('idle')
+
+    try {
+      // Here you would typically send the data to your newsletter service
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (response.ok) {
+        setNewsletterStatus('success')
+        newsletterForm.reset()
+      } else {
+        setNewsletterStatus('error')
+      }
+    } catch (error) {
+      console.error('Newsletter error:', error)
+      setNewsletterStatus('error')
+    } finally {
+      setIsNewsletterSubmitting(false)
+    }
+  }
+
   return (
     <section id="contact" className="py-24 bg-secondary/30">
       <div className="container">
@@ -103,16 +188,62 @@ export function ContactSection() {
                   <p className="text-muted-foreground mb-4">
                     Subscribe to our newsletter for the latest updates and tips.
                   </p>
-                  <div className="flex gap-2">
-                    <Input 
-                      placeholder="Enter your email" 
-                      type="email"
-                      className="flex-1"
-                    />
-                    <Button>
-                      <Send className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  <Form {...newsletterForm}>
+                    <form onSubmit={newsletterForm.handleSubmit(onNewsletterSubmit)} className="space-y-4">
+                      <div className="flex gap-2">
+                        <FormField
+                          control={newsletterForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input 
+                                  placeholder="Enter your email" 
+                                  type="email"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button 
+                          type="submit" 
+                          disabled={isNewsletterSubmitting}
+                          className="px-6"
+                        >
+                          {isNewsletterSubmitting ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Send className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                      
+                      {/* Newsletter Status Messages */}
+                      {newsletterStatus === 'success' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center gap-2 text-green-600 text-sm"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Successfully subscribed! Check your email.</span>
+                        </motion.div>
+                      )}
+                      
+                      {newsletterStatus === 'error' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center gap-2 text-red-600 text-sm"
+                        >
+                          <AlertCircle className="w-4 h-4" />
+                          <span>Something went wrong. Please try again.</span>
+                        </motion.div>
+                      )}
+                    </form>
+                  </Form>
                 </CardContent>
               </Card>
             </motion.div>
@@ -129,55 +260,131 @@ export function ContactSection() {
               <CardHeader>
                 <CardTitle className="text-2xl">Send us a Message</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <label htmlFor="firstName" className="text-sm font-medium">
-                      First Name
-                    </label>
-                    <Input id="firstName" placeholder="John" />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="lastName" className="text-sm font-medium">
-                      Last Name
-                    </label>
-                    <Input id="lastName" placeholder="Doe" />
-                  </div>
-                </div>
+              <CardContent>
+                <Form {...contactForm}>
+                  <form onSubmit={contactForm.handleSubmit(onContactSubmit)} className="space-y-6">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <FormField
+                        control={contactForm.control}
+                        name="firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="John" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={contactForm.control}
+                        name="lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Doe" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">
-                    Email
-                  </label>
-                  <Input id="email" type="email" placeholder="john@example.com" />
-                </div>
+                    <FormField
+                      control={contactForm.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder="john@example.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <div className="space-y-2">
-                  <label htmlFor="company" className="text-sm font-medium">
-                    Company (Optional)
-                  </label>
-                  <Input id="company" placeholder="Your Company" />
-                </div>
+                    <FormField
+                      control={contactForm.control}
+                      name="company"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Company (Optional)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Your Company" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium">
-                    Message
-                  </label>
-                  <Textarea 
-                    id="message" 
-                    placeholder="Tell us about your project..."
-                    className="min-h-[120px]"
-                  />
-                </div>
+                    <FormField
+                      control={contactForm.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Message</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Tell us about your project..."
+                              className="min-h-[120px]"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <Button className="w-full" size="lg">
-                  <Send className="w-4 h-4 mr-2" />
-                  Send Message
-                </Button>
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4 mr-2" />
+                          Send Message
+                        </>
+                      )}
+                    </Button>
 
-                <p className="text-xs text-muted-foreground text-center">
-                  We'll get back to you within 24 hours.
-                </p>
+                    {/* Contact Form Status Messages */}
+                    {submitStatus === 'success' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 text-green-600 text-sm justify-center"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        <span>Message sent successfully! We'll get back to you soon.</span>
+                      </motion.div>
+                    )}
+                    
+                    {submitStatus === 'error' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 text-red-600 text-sm justify-center"
+                      >
+                        <AlertCircle className="w-4 h-4" />
+                        <span>Failed to send message. Please try again or contact us directly.</span>
+                      </motion.div>
+                    )}
+
+                    <p className="text-xs text-muted-foreground text-center">
+                      We'll get back to you within 24 hours.
+                    </p>
+                  </form>
+                </Form>
               </CardContent>
             </Card>
           </motion.div>

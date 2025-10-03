@@ -185,7 +185,20 @@ export const siteConfig: SiteConfig = {
     subtitle: "Join thousands of satisfied customers who have transformed their business with our template.",
     email: "hello@yourdomain.com",
     phone: "+1 (555) 123-4567",
-    address: "123 Business St, Suite 100, City, State 12345"
+    address: "123 Business St, Suite 100, City, State 12345",
+    whatsapp: {
+      number: "1234567890", // Your WhatsApp number (without + or spaces)
+      message: "Hi! I'm interested in your SaaS template. Can you help me?"
+    },
+    calendly: {
+      url: "https://calendly.com/yourusername/30min", // Your Calendly booking URL
+      enabled: true
+    },
+    messenger: {
+      pageId: "your-facebook-page-id", // Your Facebook Page ID
+      appId: "your-facebook-app-id", // Your Facebook App ID
+      enabled: true
+    }
   },
   stats: [
     {
